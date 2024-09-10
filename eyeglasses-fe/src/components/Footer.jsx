@@ -5,7 +5,7 @@ import ig_icon from "../assets/icon/instagram.png";
 import github_icon from "../assets/icon/github.png";
 const Footer = () => {
   return (
-    <div className="bg-[#262953] text-white pt-8">
+    <div className="bg-[#CDC2A5] text-white pt-10">
       <div className="ml-[100px] mr-[100px] pb-4">
         <div className="flex justify-between">
           <div>
