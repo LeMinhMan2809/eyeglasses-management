@@ -10,3 +10,33 @@
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
 }
+
+.subMenu{
+  position:absolute;
+  width: 200px;
+  background-color: #E1D7C6;
+  box-shadow: 0 20px 45px #00000020;
+  margin-top: 0px;
+  opacity: 0;
+  z-index: 100;
+  /* display: none; */
+  transition: all ease-in-out 0.5s;
+}
+
+.subMenu a{
+  padding: 8px 10px;
+}
+
+/* ul li:hover .subMenu{
+  opacity: 1;
+  visibility: inherit;
+  z-index: 999;
+  display: block;
+  top: 100%;
+} */
+
+.productTitle:hover .subMenu {
+    /* display: block; */
+    /* visibility: visible; */
+    opacity: 1;
+}

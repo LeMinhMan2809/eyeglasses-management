@@ -1,4 +1,5 @@
 import React from "react";
+import "../index.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -18,16 +19,26 @@ const Navbar = () => {
         <li className="px-5">
           <Link to="/">Trang chủ</Link>
         </li>
-        <li className="px-5">
-          <Link to="/">Sản phẩm</Link>
+        <li className="productTitle px-5">
+          <Link className="" to="/">
+            Sản phẩm
+          </Link>
+          <div className="subMenu flex flex-col shadow">
+            <Link to="/">Gọng kính</Link>
+            <Link to="/">Tròng kính</Link>
+            <Link to="/">Kính râm</Link>
+          </div>
         </li>
         <li className="px-5">Cửa hàng</li>
+        <li className="mx-5 relative after:bg-[#c3a26a] after:absolute after:h-[0.1rem] after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer">
+          <Link to="/">Bài viết</Link>
+        </li>
       </ul>
       <div className="flex items-center rounded-[50px] px-[10px] py-[10px]">
         <input
           type="text"
           placeholder="Tìm kiếm sản phẩm"
-          className="p-3 text-[15px] w-[250px] rounded-[50px]"
+          className="p-3 text-[15px] font-medium w-[270px] rounded-[50px] opacity-70"
         />
         <img
           src={search_icon_black}
@@ -50,7 +61,7 @@ const Navbar = () => {
           <Link to="/login">
             <FontAwesomeIcon
               icon={faUser}
-              className="w-5 h-5 pl-2 cursor-pointer hover:text-[#c3a26a] transition-transform duration-300"
+              className="w-5 h-5 pl-2 cursor-pointer hover:text-[#c3a26a] transition-all ease-in-out duration-300"
             />
           </Link>
         </div>
