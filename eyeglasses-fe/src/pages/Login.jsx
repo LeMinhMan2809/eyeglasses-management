@@ -5,13 +5,13 @@ import loginPic from "../assets/login_banner.png";
 
 const Login = () => {
   return (
-    <div className="mt-6 ml-[10rem] mr-[10rem] flex gap-2">
+    <div className="mt-6 ml-[9rem] mr-[9rem] flex gap-2">
       <div>
-        <img className="rounded-lg w-[550px] h-[400px]" src={loginPic} alt="" />
+        <img className="rounded-lg w-[560px] h-[420px]" src={loginPic} alt="" />
       </div>
-      <div className="w-[650px] bg-stone-400">
+      <div className="w-[660px] bg-stone-400">
         <div>
-          <p className="text-xl text-center font-bold">Đăng nhập</p>
+          <p className="text-xl text-center font-bold mt-3">Đăng nhập</p>
           <p className="text-lg text-center font-medium">
             Hãy đăng nhập để mua sắm dễ dàng hơn
           </p>
@@ -22,7 +22,7 @@ const Login = () => {
             <input
               required
               placeholder="Nhập tài khoản"
-              className="w-[500px] h-10 rounded-lg px-2 border-2  focus:outline-none focus:border-[#c3a26a] border-stone-500"
+              className="w-[500px] h-10 rounded-lg px-2 border-2 focus:outline-none focus:border-[#c3a26a] border-stone-500"
             />
           </div>
           <div className="mt-3 ml-10">
@@ -33,8 +33,12 @@ const Login = () => {
               className="w-[500px] h-10 rounded-lg text-lg px-2 border-2 focus:outline-none focus:border-[#c3a26a] border-stone-500"
             />
             <div>
-              <RemoveRedEyeIcon className="absolute right-[280px] top-[324px] cursor-pointer" />
+              <RemoveRedEyeIcon className="absolute right-[280px] top-[333px] cursor-pointer" />
             </div>
+          </div>
+
+          <div>
+            <p className="text-lg font-bold mt-3 ml-10">Quên mật khẩu?</p>
           </div>
 
           <div className="flex mt-5 justify-center">
@@ -43,8 +47,18 @@ const Login = () => {
             </button>
           </div>
 
-          <div>
-            <p className="text-lg font-bold mt-2 ml-10">Quên mật khẩu?</p>
+          <div className="mt-3 ml-8 flex self-center justify-center items-center">
+            <div>
+              <hr className="w-[50px]" />
+            </div>
+
+            <div>
+              <p className="text-lg mx-4">Hoặc đăng nhập với</p>
+            </div>
+
+            <div>
+              <hr className="w-[50px]" />
+            </div>
           </div>
 
           <div>

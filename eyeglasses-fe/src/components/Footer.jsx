@@ -24,6 +24,7 @@ const Footer = () => {
               <li className="mb-2">Tròng kính</li>
               <li className="mb-2">Gọng kính</li>
               <li className="mb-2">Kính râm</li>
+              <li className="mb-2">Kính áp tròng</li>
               <li className="mb-2"></li>
             </ul>
           </div>

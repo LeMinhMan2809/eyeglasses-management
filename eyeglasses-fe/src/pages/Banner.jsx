@@ -1,4 +1,5 @@
 import React from "react";
+import banner1 from "../assets/banner1.png";
 import banner2 from "../assets/banner2.png";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -28,11 +29,19 @@ const Banner = () => {
       </SwiperSlide>
       <SwiperSlide>
         <div>
+          <img src={banner1} alt="" />
+        </div>
+      </SwiperSlide>
+      <SwiperSlide>
+        <div>
           <img src={banner2} alt="" />
         </div>
       </SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
+      <SwiperSlide>
+        <div>
+          <img src={banner1} alt="" />
+        </div>
+      </SwiperSlide>
     </Swiper>
   );
 };
