@@ -4,23 +4,26 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 
+//Routes//
+const productRoute = require("./routes/product");
+const categoryRoute = require("./routes/category");
+const connectDB = require("./config/db");
+
 require("dotenv").config();
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-//DB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
+app.use("/api/product", productRoute);
+app.use("/api/category", categoryRoute);
 
-        console.log("DB Connected")
-    })
-    .catch((err) => {
-        console.log(err)});
+//DB Connection
+connectDB();
 
 
 app.listen(process.env.PORT, () => {
