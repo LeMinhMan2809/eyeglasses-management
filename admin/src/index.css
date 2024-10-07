@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: #ebe9e9;
+}
+
+.css-20bmp1-MuiSvgIcon-root{
+    font-size: 1.1rem !important;
+}
+
+.closeSub {
+    height: 0;
+    opacity: 0;
+}
+
+.openSub {
+    height: auto;
+    opacity: 1;
+}
+
+.iconDashboard {
+    display: flex !important;
+    color: white !important;
+    opacity: 0.3 !important;
+}
+.iconDashboard svg {
+    width: 1.8rem !important;
+    height: 1.8rem !important;  
+}
+
+.active {
+    color: #d3b581;
+}
+
+.active svg {
+    color: #d3b581;
+}
