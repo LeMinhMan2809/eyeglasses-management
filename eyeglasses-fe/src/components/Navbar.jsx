@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { StoreContext } from "../context/StoreContext";
 import "../index.css";
-import { Link } from "react-router-dom";
+import "./SearchBar.css";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
+import LogoutIcon from "@mui/icons-material/Logout";
 import logo_w from "../assets/logo_w.png";
 import logo_b from "../assets/logo_b.png";
 import search_icon_light from "../assets/search-w.png";
@@ -12,6 +15,33 @@ import toggle_light from "../assets/night.png";
 import toggle_dark from "../assets/day.png";
 
 const Navbar = () => {
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  const { token, setToken, setIsFocused } = useContext(StoreContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
+
+  const [showMenuUser, setShowMenuUser] = useState(false);
+
+  const toggleMenuUser = () => {
+    setShowMenuUser(!showMenuUser);
+  };
+
+  const Logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    navigate("/");
+  };
+
   return (
     <div className="bg-[#E1D7C6] w-full flex justify-between items-center pl-[80px] pr-[60px] py-5">
       <img src={logo_b} alt="logo" className="w-17 h-11 cursor-pointer" />
@@ -35,37 +65,59 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="flex items-center justify-center rounded-[50px] px-[10px] py-[10px]">
-        <input
-          type="text"
-          placeholder="Tìm kiếm sản phẩm"
-          className="p-3 text-[15px] font-medium w-[270px] rounded-[50px] opacity-70"
-        />
-        <img
+        <div className="z-[1000]">
+          <input
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            type="text"
+            placeholder="Tìm kiếm sản phẩm"
+            className="p-3 text-[15px] font-medium w-[270px] rounded-[50px] opacity-70"
+          />
+        </div>
+
+        {/* <img
           src={search_icon_black}
           alt="search"
           className="w-4 h-4 absolute right-[250px] cursor-pointer"
-        />
+        /> */}
 
         {/* <img src={toggle_light} alt="" className="w-10 cursor-pointer pl-4" /> */}
 
-        {/* <div className="h-5">
-          <Link to="/login">
-            <FontAwesomeIcon
-              icon={faUser}
-              className="w-5 h-5 pl-2 cursor-pointer hover:text-[#c3a26a] transition-all ease-in-out duration-300"
-            />
-          </Link>
-        </div> */}
-
-        <div className="">
-          <Link to="/login">
-            <div className="ml-2">
-              <p className="bg-[#d3b581] py-2 px-3 rounded-xl font-medium">
-                Đăng nhập
-              </p>
+        {!token ? (
+          <div className="">
+            <Link to="/login">
+              <div className="ml-2">
+                <p className="bg-[#d3b581] py-2 px-3 rounded-xl font-medium">
+                  Đăng nhập
+                </p>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          <div className="h-5">
+            <button onClick={toggleMenuUser}>
+              <Link to="">
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="w-5 h-5 pl-2 cursor-pointer hover:text-[#c3a26a] transition-all ease-in-out duration-300"
+                />
+              </Link>
+            </button>
+            <div>
+              <div
+                className={`${
+                  showMenuUser ? "subMenuUser" : "closeSubMenuUser"
+                }`}
+              >
+                <Link to="/">Hồ sơ</Link>
+                <button onClick={Logout} className="">
+                  <LogoutIcon fontSize="small" className="pr-2" />
+                  <Link to="/">Đăng xuất</Link>
+                </button>
+              </div>
             </div>
-          </Link>
-        </div>
+          </div>
+        )}
 
         <div className="h-5">
           <Link to="/cart">

@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { StoreContext } from "../context/StoreContext";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import productImage from "../assets/HMK_glasses.png";
+import { getProductIDAPI, listProducts } from "../utils/handleAPI";
+import { useParams } from "react-router-dom";
 
 const ProductDetail = () => {
+  const { url, token, setToken, isFocused } = useContext(StoreContext);
+  const { id } = useParams();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [value, setInputValue] = React.useState(1);
+  const [productData, setProductData] = useState([]);
+
+  useEffect(() => {
+    getProductIDAPI("/api/product/", id).then((res) => {
+      setProductData(res);
+      const token = localStorage.getItem("token");
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    });
+  }, []);
+
+  const checkLogin = () => {
+    if (!isLoggedIn) {
+      alert("Bạn phải đăng nhập để đặt hàng");
+      return;
+    }
+  };
 
   const onIncrease = () => {
     setInputValue(value + 1);
@@ -25,7 +49,7 @@ const ProductDetail = () => {
           <InnerImageZoom
             zoomType="hover"
             zoomScale={1}
-            src={productImage}
+            src={"http://localhost:4000/images/" + productData.images}
             className="w-[600px] h-[600px] rounded-xl"
           />
           {/* <img className="w-[600px] rounded-xl" src={productImage} alt="" /> */}
@@ -33,7 +57,7 @@ const ProductDetail = () => {
         </div>
 
         <div>
-          <p className="text-3xl font-bold">Gọng kính HMK</p>
+          <p className="text-3xl font-bold">{productData.name}</p>
 
           <div className="mt-5">
             <span className="text-xl font-medium pt-5 text-red-500">
@@ -44,10 +68,7 @@ const ProductDetail = () => {
             </span>
           </div>
 
-          <p className="mt-5">
-            Gọng kính cốt CTY là sản phẩm chất lượng cao, giúp bạn tạo nên phong
-            cách thời trang độc đáo và thu hút mọi ánh nhìn.
-          </p>
+          <p className="mt-5">{productData.description}</p>
 
           <div className="flex self-center gap-10">
             <div className="mt-5 bg-[#c3a26a] w-[8rem] px-5 py-3 rounded-xl">
@@ -65,7 +86,10 @@ const ProductDetail = () => {
             </div>
 
             <div>
-              <button className="bg-[#c3a26a] text-white font-medium rounded-xl px-10 py-3 mt-5">
+              <button
+                onClick={checkLogin}
+                className="bg-[#c3a26a] text-white font-medium rounded-xl px-10 py-3 mt-5"
+              >
                 Thêm vào giỏ hàng
               </button>
             </div>

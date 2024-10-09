@@ -27,6 +27,36 @@
   padding: 8px 10px;
 }
 
+.subMenuUser {
+  flex-direction: column;
+  border-radius: 5px;
+  position: absolute;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  background-color: #E1D7C6;
+  box-shadow: 0 20px 45px #00000020;
+  margin-top: 0px;
+  opacity: 1;
+  z-index: 100;
+  /* display: none; */
+  transition: all ease-in-out 0.5s;
+}
+
+.closeSubMenuUser {
+  flex-direction: column;
+  border-radius: 5px;
+  position: absolute;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  background-color: #E1D7C6;
+  box-shadow: 0 20px 45px #00000020;
+  margin-top: 0px;
+  opacity: 0;
+  z-index: 100;
+  /* display: none; */
+  transition: all ease-in-out 0.5s;
+}
+
 /* ul li:hover .subMenu{
   opacity: 1;
   visibility: inherit;
@@ -47,4 +77,17 @@
 
 .css-1edfpdg-MuiTypography-root {
   padding-left: 10px !important;
+}
+
+
+/* Hover Image */
+.hoverZoom {
+  overflow: hidden;
+}
+.hoverZoom img {
+  transition: transform .5s ease;
+}
+
+.hoverZoom:hover img {
+  transform: scale(1.2);
 }

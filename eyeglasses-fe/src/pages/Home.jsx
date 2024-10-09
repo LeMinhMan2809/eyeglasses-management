@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Banner from "./Banner";
+import { StoreContext } from "../context/StoreContext";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from "react-router-dom";
+import ProductCardSwiper from "../components/ProductCardSwiper";
 
 // Import Swiper styles
 import "swiper/css";
@@ -11,10 +14,20 @@ import { Pagination, Navigation } from "swiper/modules";
 import ProductCard from "../components/ProductCard";
 
 import warrantyIcon from "../assets/warranty.png";
+import { listProducts } from "../utils/handleAPI";
 
 const Home = () => {
+  const { url, token, setToken, isFocused } = useContext(StoreContext);
+  const [productData, setProductData] = useState([]);
+
+  useEffect(() => {
+    listProducts("/api/product").then((res) => {
+      setProductData(res);
+    });
+  }, []);
+
   return (
-    <>
+    <div className={`page-container ${isFocused ? "blurred" : ""}`}>
       <Banner />
 
       <div className="mt-5 ml-[80px] mr-[80px]">
@@ -31,25 +44,42 @@ const Home = () => {
           className="mySwiper"
         >
           <SwiperSlide>
-            <ProductCard />
+            <ProductCardSwiper />
           </SwiperSlide>
 
           <SwiperSlide>
-            <ProductCard />
+            <ProductCardSwiper />
           </SwiperSlide>
 
           <SwiperSlide>
-            <ProductCard />
+            <ProductCardSwiper />
           </SwiperSlide>
 
           <SwiperSlide>
-            <ProductCard />
+            <ProductCardSwiper />
           </SwiperSlide>
 
           <SwiperSlide>
-            <ProductCard />
+            <ProductCardSwiper />
           </SwiperSlide>
         </Swiper>
+      </div>
+
+      <div className="mt-[5rem] ml-[80px] mr-[80px]">
+        <h3 className="text-3xl pb-5">Sản phẩm </h3>
+        <div className="grid grid-cols-4">
+          {productData.map((product, index) => (
+            <Link to={`/product/${product._id}`} key={index}>
+              <ProductCard
+                key={index}
+                name={product.name}
+                images={product.images}
+                price={product.price}
+                description={product.description}
+              />
+            </Link>
+          ))}
+        </div>
       </div>
 
       <hr className="mt-[5rem]"></hr>
@@ -77,7 +107,7 @@ const Home = () => {
       </div>
 
       <hr className=""></hr>
-    </>
+    </div>
   );
 };
 
