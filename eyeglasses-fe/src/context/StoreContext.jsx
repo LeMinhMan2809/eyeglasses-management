@@ -6,6 +6,7 @@ const StoreContextProvider = (props) => {
   const url = "http://localhost:4000";
   const [token, setToken] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [cartProducts, setCartProducts] = useState([]);
 
   const contextValue = {
     url,

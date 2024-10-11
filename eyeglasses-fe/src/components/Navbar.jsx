@@ -15,6 +15,7 @@ import toggle_light from "../assets/night.png";
 import toggle_dark from "../assets/day.png";
 
 const Navbar = () => {
+  const token = localStorage.getItem("token");
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -23,7 +24,7 @@ const Navbar = () => {
     setIsFocused(false);
   };
 
-  const { token, setToken, setIsFocused } = useContext(StoreContext);
+  const { setToken, setIsFocused } = useContext(StoreContext);
   const navigate = useNavigate();
 
   useEffect(() => {

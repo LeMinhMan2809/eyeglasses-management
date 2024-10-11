@@ -34,6 +34,7 @@ const Login = () => {
       if (res.success) {
         setToken(res.token);
         localStorage.setItem("token", res.token);
+        sessionStorage.setItem("token", res.token);
         toast.success("Đăng nhập thành công");
         navigate("/");
       } else {
