@@ -8,13 +8,18 @@ import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import productImage from "../assets/HMK_glasses.png";
 import { getProductIDAPI, listProducts } from "../utils/handleAPI";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductDetail = () => {
   const { url, token, setToken, isFocused } = useContext(StoreContext);
+  const context = useContext(StoreContext);
   const { id } = useParams();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [value, setInputValue] = React.useState(1);
-  const [productData, setProductData] = useState([]);
+  const [productData, setProductData] = useState({});
 
   useEffect(() => {
     getProductIDAPI("/api/product/", id).then((res) => {
@@ -26,10 +31,18 @@ const ProductDetail = () => {
     });
   }, []);
 
-  const checkLogin = () => {
+  // const addToCart = (productData, quantity) => {
+  //   // if (!isLoggedIn) {
+  //   //   toast.error("Bạn phải đăng nhập để thêm vào giỏ hàng!");
+  //   // }
+  //   context.addToCart(productData, quantity);
+  // };
+
+  const addToCartHandler = () => {
     if (!isLoggedIn) {
-      alert("Bạn phải đăng nhập để đặt hàng");
-      return;
+      toast.error("Bạn phải đăng nhập để thêm vào giỏ hàng!");
+    } else {
+      context.addToCart(productData, value);
     }
   };
 
@@ -61,7 +74,7 @@ const ProductDetail = () => {
 
           <div className="mt-5">
             <span className="text-xl font-medium pt-5 text-red-500">
-              150.000 VNĐ
+              {productData.price} VNĐ
             </span>
             <span className="text-base font-medium pt-5 pl-3 line-through">
               200.000 VNĐ
@@ -70,12 +83,13 @@ const ProductDetail = () => {
 
           <p className="mt-5">{productData.description}</p>
 
-          <div className="flex self-center gap-10">
+          <div className="flex self-center gap-8">
             <div className="mt-5 bg-[#c3a26a] w-[8rem] px-5 py-3 rounded-xl">
               <button>
                 <RemoveIcon onClick={onDecrease} />
               </button>
               <input
+                onChange={(e) => setInputValue(e.target.value)}
                 className="w-10 text-center text-white font-medium bg-[#c3a26a]"
                 type="text"
                 value={value}
@@ -87,7 +101,7 @@ const ProductDetail = () => {
 
             <div>
               <button
-                onClick={checkLogin}
+                onClick={() => addToCartHandler()}
                 className="bg-[#c3a26a] text-white font-medium rounded-xl px-10 py-3 mt-5"
               >
                 Thêm vào giỏ hàng

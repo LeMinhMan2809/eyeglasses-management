@@ -15,6 +15,7 @@ import toggle_light from "../assets/night.png";
 import toggle_dark from "../assets/day.png";
 
 const Navbar = () => {
+  const { cartData } = useContext(StoreContext);
   const token = localStorage.getItem("token");
   const handleFocus = () => {
     setIsFocused(true);
@@ -27,9 +28,9 @@ const Navbar = () => {
   const { setToken, setIsFocused } = useContext(StoreContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
+  // useEffect(() => {
+  //   console.log(token);
+  // }, [token]);
 
   const [showMenuUser, setShowMenuUser] = useState(false);
 
@@ -127,7 +128,7 @@ const Navbar = () => {
               className="w-5 h-5 pl-2 cursor-pointer"
             />
             <sup className="text-xs inline-block px-1 text-white rounded-full bg-red-500 text-center">
-              0
+              {cartData.reduce((total, item) => total + item.quantity, 0)}
             </sup>
           </Link>
         </div>
