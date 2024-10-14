@@ -13,10 +13,18 @@ import search_icon_light from "../assets/search-w.png";
 import search_icon_black from "../assets/search-b.png";
 import toggle_light from "../assets/night.png";
 import toggle_dark from "../assets/day.png";
+import { listCategories } from "../utils/handleAPI";
 
 const Navbar = () => {
+  const [categoryData, setCategoryData] = useState([]);
   const { cartData } = useContext(StoreContext);
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    listCategories("/api/category").then((data) => {
+      setCategoryData(data);
+    });
+  });
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -56,9 +64,11 @@ const Navbar = () => {
             Sản phẩm
           </Link>
           <div className="subMenu flex flex-col shadow">
-            <Link to="/">Gọng kính</Link>
-            <Link to="/">Tròng kính</Link>
-            <Link to="/">Kính râm</Link>
+            {categoryData.map((category, index) => (
+              <Link key={index} to={`/category/${category._id}`}>
+                <div>{category.name}</div>
+              </Link>
+            ))}
           </div>
         </li>
         <li className="px-5">Cửa hàng</li>
@@ -111,7 +121,7 @@ const Navbar = () => {
                   showMenuUser ? "subMenuUser" : "closeSubMenuUser"
                 }`}
               >
-                <Link to="/">Hồ sơ</Link>
+                <Link to="/profile">Hồ sơ</Link>
                 <button onClick={Logout} className="">
                   <LogoutIcon fontSize="small" className="pr-2" />
                   <Link to="/">Đăng xuất</Link>
