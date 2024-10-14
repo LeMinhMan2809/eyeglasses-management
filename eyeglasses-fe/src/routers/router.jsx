@@ -8,6 +8,7 @@ import ListingProduct from "../pages/ListingProduct";
 import ProductDetail from "../pages/ProductDetail";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
+import Profile from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,12 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "category/:id",
+        path: "/profile",
+        element: <Profile />,
+      },
+
+      {
+        path: "category/:categoryID",
         element: <ListingProduct />,
       },
 
