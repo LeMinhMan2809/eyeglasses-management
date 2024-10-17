@@ -22,7 +22,8 @@ const Cart = () => {
 
   const updateCartData = (updatedCart) => {
     setCartDataList(updatedCart);
-    ls.setItem("cart", JSON.stringify(cartDataList)); // Update localStorage
+    // ls.setItem("cart", JSON.stringify(cartDataList)); // Update localStorage
+    ls.setItem("cart", JSON.stringify(updatedCart)); // Update localStorage
   };
 
   const onIncrease = (index) => {
@@ -34,10 +35,16 @@ const Cart = () => {
     const updatedCart = [...cartDataList];
     if (updatedCart[index].quantity > 1) {
       updatedCart[index].quantity -= 1;
-      // ls.setItem("cart", JSON.stringify(updatedCart));
-      // setCartDataList(JSON.parse(ls.getItem("cart")));
       updateCartData(updatedCart);
     }
+  };
+
+  const removeItemFromCart = (index) => {
+    const updatedCart = [...cartDataList];
+    console.log(updatedCart.splice(index, 1));
+    updatedCart.splice(index, 1);
+    window.location.reload();
+    updateCartData(updatedCart);
   };
 
   return (
@@ -81,7 +88,7 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        {item.product.price}
+                        {item.product.price.toLocaleString()}
                         <span>đ</span>
                       </td>
                       <td className="px-6 py-4">
@@ -101,15 +108,17 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        {item.quantity * item.product.price}
+                        {(item.quantity * item.product.price).toLocaleString()}
+                        <span>đ</span>
                       </td>
                       <td className="px-6 py-4">
-                        <a
+                        <button
+                          onClick={() => removeItemFromCart(index)}
                           href="#"
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          className="font-medium text-gray-600  hover:underline"
                         >
-                          Edit
-                        </a>
+                          Xóa
+                        </button>
                       </td>
                     </tr>
                   );
@@ -122,10 +131,14 @@ const Cart = () => {
               <div className="flex items-center justify-between text-lg font-medium">
                 <p>Tổng</p>
                 <p>
-                  {cartDataList.reduce(
-                    (total, item) => total + item.quantity * item.product.price,
-                    0
-                  )}
+                  {cartDataList
+                    .reduce(
+                      (total, item) =>
+                        total + item.quantity * item.product.price,
+                      0
+                    )
+                    .toLocaleString()}
+                  <span>đ</span>
                 </p>
               </div>
               <div className="mx-auto w-full flex justify-center mt-5">
