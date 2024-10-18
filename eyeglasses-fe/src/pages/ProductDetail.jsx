@@ -3,6 +3,7 @@ import { StoreContext } from "../context/StoreContext";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import productImage from "../assets/HMK_glasses.png";
@@ -13,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ReviewCard from "./ReviewCard";
 import { addReviewAPI, getReviewAPI } from "../utils/reviewAPI";
 
 const ProductDetail = () => {
@@ -27,8 +27,10 @@ const ProductDetail = () => {
   const [productData, setProductData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const [userProfile, setUserProfile] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     getProductIDAPI("/api/product/", id).then((res) => {
       setProductData(res);
       if (token) {
@@ -134,7 +136,18 @@ const ProductDetail = () => {
             className="w-[600px] h-[600px] rounded-xl"
           />
           {/* <img className="w-[600px] rounded-xl" src={productImage} alt="" /> */}
+          <button>
+            {isFavorite ? (
+              <FavoriteIcon className="absolute left-[680px] top-[200px] cursor-pointer" />
+            ) : (
+              <FavoriteBorderIcon
+                onClick={() => setIsFavorite(true)}
+                className="absolute left-[680px] top-[200px] cursor-pointer"
+              />
+            )}
+          </button>
           <FavoriteBorderIcon className="absolute left-[680px] top-[200px] cursor-pointer" />
+          {/*  */}
         </div>
 
         <div>
@@ -187,96 +200,147 @@ const ProductDetail = () => {
 
       {/* Review */}
       <div className="ml-[150px] mr-[150px] bg-white pb-8">
-        <div className="bg-white p-6 rounded-lg w-full">
-          <h2 className="text-lg font-semibold mb-4">Đánh giá</h2>
+        {token ? (
+          <>
+            <div className="bg-white p-6 rounded-lg w-full">
+              <h2 className="text-lg font-semibold mb-4">Đánh giá</h2>
 
-          {/* Rating Stars */}
-          <div className="flex items-center mb-4">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                onClick={() => handleRating(star)}
-                className={`text-2xl ${
-                  rating >= star ? "text-yellow-400" : "text-gray-300"
-                }`}
-              >
-                ★
-              </button>
-            ))}
-          </div>
-
-          {/* Review Title */}
-          <div className="mb-4">
-            <label className="block font-medium mb-2">Tiêu đề đánh giá</label>
-            <input
-              type="text"
-              placeholder="Nhập tiêu đề đánh giá của bạn"
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-500"
-              name="title"
-              value={reviewFormData.title}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Review Content */}
-          <div className="mb-4">
-            <label className="block font-medium mb-2">Nội dung</label>
-            <textarea
-              placeholder="Viết nội dung đánh giá của bạn"
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-500"
-              rows="4"
-              name="content"
-              value={reviewFormData.content}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              onClick={handleSubmit}
-              className="bg-yellow-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-yellow-600"
-            >
-              Gửi đánh giá
-            </button>
-          </div>
-        </div>
-
-        <h2 className="text-lg font-semibold mb-4 p-6">Đánh giá & nhận xét</h2>
-        {reviewData.map((review) => (
-          <div key={review._id} className="flex items-start ml-5 mb-5">
-            {/* Avatar */}
-            <div className="flex-shrink-0">
-              <div className="bg-yellow-500 rounded-full w-12 h-12 flex items-center justify-center">
-                <span className="text-white text-xl font-bold">h</span>
+              {/* Rating Stars */}
+              <div className="flex items-center mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => handleRating(star)}
+                    className={`text-2xl ${
+                      rating >= star ? "text-yellow-400" : "text-gray-300"
+                    }`}
+                  >
+                    ★
+                  </button>
+                ))}
               </div>
-            </div>
-            {/* Review Content */}
-            <div className="ml-4">
-              <div className="flex items-center">
-                {/* Stars */}
-                <div className="flex text-yellow-400">
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                </div>
-                <span className="ml-2 text-gray-500 text-sm">
-                  12 tháng trước
-                </span>
-              </div>
-              {/* Reviewer Name */}
-              <div className="text-gray-700 font-medium">
-                {review.user.name}
-              </div>
+
               {/* Review Title */}
-              <h3 className="font-semibold text-black mt-5">{review.title}</h3>
-              {/* Review Body */}
-              <p className="text-gray-600 mt-2">{review.content}</p>
+              <div className="mb-4">
+                <label className="block font-medium mb-2">
+                  Tiêu đề đánh giá
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nhập tiêu đề đánh giá của bạn"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-500"
+                  name="title"
+                  value={reviewFormData.title}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Review Content */}
+              <div className="mb-4">
+                <label className="block font-medium mb-2">Nội dung</label>
+                <textarea
+                  placeholder="Viết nội dung đánh giá của bạn"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-500"
+                  rows="4"
+                  name="content"
+                  value={reviewFormData.content}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSubmit}
+                  className="bg-yellow-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-yellow-600"
+                >
+                  Gửi đánh giá
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+            <h2 className="text-lg font-semibold mb-4 p-6">
+              Đánh giá & nhận xét
+            </h2>
+            {reviewData.map((review) => (
+              <div key={review._id} className="flex items-start ml-5 mb-5">
+                {/* Avatar */}
+                <div className="flex-shrink-0">
+                  <div className="bg-yellow-500 rounded-full w-12 h-12 flex items-center justify-center">
+                    <span className="text-white text-xl font-bold">M</span>
+                  </div>
+                </div>
+                {/* Review Content */}
+                <div className="ml-4">
+                  <div className="flex items-center">
+                    {/* Stars */}
+                    <div className="flex text-yellow-400">
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                    </div>
+                    <span className="ml-2 text-gray-500 text-sm">
+                      {review.createdAt.substring(0, 10)}
+                    </span>
+                  </div>
+                  {/* Reviewer Name */}
+                  <div className="text-gray-700 font-medium">
+                    {review.user.name}
+                  </div>
+                  {/* Review Title */}
+                  <h3 className="font-semibold text-black mt-5">
+                    {review.title}
+                  </h3>
+                  {/* Review Body */}
+                  <p className="text-gray-600 mt-2">{review.content}</p>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            <h2 className="text-lg font-semibold mb-4 p-6">
+              Đánh giá & nhận xét
+            </h2>
+            {reviewData.map((review) => (
+              <div key={review._id} className="flex items-start ml-5 mb-5">
+                {/* Avatar */}
+                <div className="flex-shrink-0">
+                  <div className="bg-yellow-500 rounded-full w-12 h-12 flex items-center justify-center">
+                    <span className="text-white text-xl font-bold">M</span>
+                  </div>
+                </div>
+                {/* Review Content */}
+                <div className="ml-4">
+                  <div className="flex items-center">
+                    {/* Stars */}
+                    <div className="flex text-yellow-400">
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                    </div>
+                    <span className="ml-2 text-gray-500 text-sm">
+                      {review.createdAt.substring(0, 10)}
+                    </span>
+                  </div>
+                  {/* Reviewer Name */}
+                  <div className="text-gray-700 font-medium">
+                    {review.user.name}
+                  </div>
+                  {/* Review Title */}
+                  <h3 className="font-semibold text-black mt-5">
+                    {review.title}
+                  </h3>
+                  {/* Review Body */}
+                  <p className="text-gray-600 mt-2">{review.content}</p>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
