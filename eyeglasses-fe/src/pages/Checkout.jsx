@@ -114,6 +114,18 @@ const Checkout = () => {
             <p className="font-semibold text-lg mb-3">Địa chỉ nhận hàng</p>
             <div className="flex items-center">
               <div className="flex flex-col">
+                {addressData.length === 0 && (
+                  <div className="text-base text-red-500 font-medium flex items-center gap-3">
+                    Chưa có địa chỉ giao hàng, thêm tại đây
+                    <div>
+                      <Link to="/profile">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                          Thêm địa chỉ
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
                 {addressData.length > 0 &&
                   addressData.map((address, index) => (
                     <div key={index} className="flex items-center gap-3">
