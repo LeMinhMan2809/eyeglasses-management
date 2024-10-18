@@ -88,8 +88,10 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        {item.product.price.toLocaleString()}
-                        <span>đ</span>
+                        {item.product.price.toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
                       </td>
                       <td className="px-6 py-4">
                         <div className="border-[#c3a26a] border-2 w-fit px-3 py-2 rounded-2xl">
@@ -108,8 +110,13 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        {(item.quantity * item.product.price).toLocaleString()}
-                        <span>đ</span>
+                        {(item.quantity * item.product.price).toLocaleString(
+                          "vi-VN",
+                          {
+                            style: "currency",
+                            currency: "VND",
+                          }
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <button
@@ -137,8 +144,10 @@ const Cart = () => {
                         total + item.quantity * item.product.price,
                       0
                     )
-                    .toLocaleString()}
-                  <span>đ</span>
+                    .toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
                 </p>
               </div>
               <div className="mx-auto w-full flex justify-center mt-5">

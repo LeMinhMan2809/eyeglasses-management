@@ -26,7 +26,7 @@ const ListingProduct = () => {
       setProductData(res);
       setLoading(false);
     });
-  }, []);
+  }, [categoryID]);
 
   if (loading) {
     return <div>Loading...</div>; // Show loading state

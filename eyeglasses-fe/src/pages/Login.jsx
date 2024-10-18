@@ -31,6 +31,7 @@ const Login = () => {
   const Login = (e) => {
     e.preventDefault();
     userLoginAPI("/api/user/login", formData).then((res) => {
+      console.log(res);
       if (res.success) {
         setToken(res.token);
         localStorage.setItem("token", res.token);
@@ -40,16 +41,15 @@ const Login = () => {
       } else {
         toast.error(res.message);
       }
-      console.log(res);
     });
   };
 
   return (
-    <div className="mt-6 ml-[9rem] mr-[9rem] flex gap-2">
+    <div className="mt-6 ml-[9rem] mr-[8rem] flex gap-2">
       <div>
-        <img className="rounded-lg w-[560px] h-[420px]" src={loginPic} alt="" />
+        <img className="rounded-lg w-[590px] h-[420px]" src={loginPic} alt="" />
       </div>
-      <div className="w-[660px] bg-stone-400">
+      <div className="w-[640px] bg-stone-400">
         <div>
           <p className="text-xl text-center font-bold mt-3">Đăng nhập</p>
           <p className="text-lg text-center font-medium">
@@ -57,7 +57,7 @@ const Login = () => {
           </p>
         </div>
         <form onSubmit={Login}>
-          <div className="ml-10 mt-5">
+          <div className="mx-10 mt-5">
             <p className="text-lg">Email</p>
             <input
               name="email"
@@ -65,10 +65,10 @@ const Login = () => {
               onChange={handleChange}
               required
               placeholder="Nhập email"
-              className="w-[500px] h-10 rounded-lg px-2 border-2 focus:outline-none focus:border-[#c3a26a] border-stone-500"
+              className="w-full h-10 rounded-lg px-2 border-2 focus:outline-none focus:border-[#c3a26a] border-stone-500"
             />
           </div>
-          <div className="mt-3 ml-10">
+          <div className="mt-3 mx-10">
             <p className="text-lg">Mật khẩu</p>
             <input
               name="password"
@@ -77,10 +77,10 @@ const Login = () => {
               type={showPassword ? "text" : "password"}
               required
               placeholder="Nhập mật khẩu"
-              className="w-[500px] h-10 rounded-lg text-lg px-2 border-2 focus:outline-none focus:border-[#c3a26a] border-stone-500"
+              className="w-full h-10 rounded-lg text-lg px-2 border-2 focus:outline-none focus:border-[#c3a26a] border-stone-500"
             />
             <div onClick={() => setShowPassword(!showPassword)}>
-              <RemoveRedEyeIcon className="absolute right-[280px] top-[333px] cursor-pointer" />
+              <RemoveRedEyeIcon className="absolute right-[200px] top-[335px] cursor-pointer" />
             </div>
           </div>
 

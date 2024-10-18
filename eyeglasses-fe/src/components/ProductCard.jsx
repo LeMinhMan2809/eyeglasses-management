@@ -7,7 +7,7 @@ const ProductCard = (props) => {
   return (
     <>
       <div className="border-2 rounded-xl w-[300px] h- flex flex-col bg-white hover:cursor-pointer">
-        <div className="w-[280px] h-[280px] flex justify-center items-center self-center rounded-xl hoverZoom">
+        <div className="w-[290px] h-[280px] flex justify-center items-center self-center rounded-xl hoverZoom">
           <img
             className="rounded-xl"
             src={url + "/images/" + props.images}
@@ -19,8 +19,10 @@ const ProductCard = (props) => {
           <p className="text-xl font-semibold">{props.name}</p>
           <div>
             <span className="text-lg font-medium pt-5 text-red-500">
-              {props.price}{" "}
-              <span className="text-lg font-medium pt-5">VNĐ</span>
+              {props.price.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
             </span>
 
             <span className="text-base font-medium pt-5 pl-3 line-through">

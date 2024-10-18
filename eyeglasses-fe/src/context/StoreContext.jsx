@@ -23,7 +23,7 @@ const StoreContextProvider = (props) => {
 
   function addToCart(data, quantity) {
     let updatedCart = [...cartData];
-    console.log(updatedCart);
+    // console.log(updatedCart);
     const productIndex = updatedCart.findIndex(
       (item) => item.product._id === data._id
     );

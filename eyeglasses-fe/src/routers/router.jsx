@@ -10,6 +10,9 @@ import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
 import Profile from "../pages/Profile";
 
+import PrivateRoute from "../components/PrivateRoute";
+import Order from "../pages/Order";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,7 +35,11 @@ const router = createBrowserRouter([
 
       {
         path: "/profile",
-        element: <Profile />,
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
       },
 
       {
@@ -53,6 +60,11 @@ const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout />,
+      },
+
+      {
+        path: "orders",
+        element: <Order />,
       },
     ],
   },
