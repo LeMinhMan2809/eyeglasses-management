@@ -113,22 +113,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-const deleteProducts = async (req, res) => {
-  const productImage = await productModel.findById(req.params.id);
-  fs.unlink(`./uploads/${productImage.images[0]}`, (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  try {
-    const product = await productModel.findByIdAndDelete(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
-    res.json({ success: true, message: "Product deleted" });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 module.exports = {
   getUsers,
   getUserID,
