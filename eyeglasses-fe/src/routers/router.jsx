@@ -12,6 +12,8 @@ import Profile from "../pages/Profile";
 
 import PrivateRoute from "../components/PrivateRoute";
 import Order from "../pages/Order";
+import Payment from "../pages/Payment";
+import Thanks from "../pages/Thanks";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,11 @@ const router = createBrowserRouter([
       },
 
       {
+        path: "search",
+        element: <ListingProduct />,
+      },
+
+      {
         path: "product/:id",
         element: <ProductDetail />,
       },
@@ -61,10 +68,21 @@ const router = createBrowserRouter([
         path: "checkout",
         element: <Checkout />,
       },
-
       {
-        path: "orders",
+        path: "/payment",
+        element: <Payment />,
+      },
+      {
+        path: "order",
         element: <Order />,
+      },
+      {
+        path: "thanks",
+        element: (
+          <PrivateRoute>
+            <Thanks />
+          </PrivateRoute>
+        ),
       },
     ],
   },
