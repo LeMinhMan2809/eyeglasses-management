@@ -1,32 +1,52 @@
 import React, { useState, useEffect } from "react";
-import SideBarCat from "../components/SideBarCat";
+import FilterSideBar from "../components/FilterSideBar";
 import ProductCard from "../components/ProductCard";
 import {
   listCategories,
   listProducts,
   getProductsByCategory,
+  getProductsByKeyword,
 } from "../utils/handleAPI";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import FilterSideBar from "../components/FilterSideBar";
 
 const ListingProduct = () => {
   const { categoryID } = useParams();
+  const [keyword, setKeyword] = useSearchParams();
   const [productData, setProductData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
 
   useEffect(() => {
-    listCategories("/api/category").then((res) => {
-      setCategoryData(res);
-    });
-  });
+    if (!keyword.get("keyword")) {
+      listCategories("/api/category").then((res) => {
+        setCategoryData(res);
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    getProductsByCategory("/api/product/category/", categoryID).then((res) => {
-      setProductData(res);
-      setLoading(false);
-    });
+    if (!keyword.get("keyword")) {
+      getProductsByCategory("/api/product/category/", categoryID).then(
+        (res) => {
+          setProductData(res);
+          setLoading(false);
+        }
+      );
+    }
   }, [categoryID]);
+
+  useEffect(() => {
+    if (keyword.get("keyword")) {
+      getProductsByKeyword(
+        "/api/product/search?keyword=" + keyword.get("keyword")
+      ).then((res) => {
+        setProductData(res);
+        setLoading(false);
+      });
+    }
+  }, [keyword]);
 
   if (loading) {
     return <div>Loading...</div>; // Show loading state
@@ -36,7 +56,7 @@ const ListingProduct = () => {
     <section className="bg-[#fbfbfb]">
       <div className="flex gap-4 ml-[70px] mr-[100px] mt-10">
         <div className="w-[8rem]">
-          <SideBarCat />
+          <FilterSideBar />
         </div>
 
         <div className="w-full] ml-3">
