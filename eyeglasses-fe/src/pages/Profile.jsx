@@ -33,9 +33,8 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userProfile, setUserProfile] = useState([]);
   const [userID, setUserID] = useState("");
-  const [selectedImage, setSelectedImage] = useState(
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-  );
+  const [selectedImage, setSelectedImage] = useState(userProfile.image);
+  const [updatedImage, setUpdatedImage] = useState("");
 
   useEffect(() => {
     getCityAPI("/api/city/cities")
@@ -134,6 +133,7 @@ const Profile = () => {
       };
       reader.readAsDataURL(file); // Read the image file as a data URL
     }
+    setUpdatedImage(event.target.files[0]);
   };
 
   const showModal = () => {
@@ -179,16 +179,17 @@ const Profile = () => {
 
   const updateProfile = async (e) => {
     e.preventDefault();
-    const form = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-    };
-    console.log(form);
-    updateProfileAPI("/api/user/" + userID, form).then((res) => {
+    console.log(updatedImage);
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("image", updatedImage);
+    console.log(formDataToSend);
+    updateProfileAPI("/api/user/" + userID, formDataToSend).then((res) => {
       if (res.success) {
         toast.success("Cập nhật thành công");
-        reloadPage();
+        window.location.reload();
       }
     });
   };
@@ -219,32 +220,31 @@ const Profile = () => {
       {userProfile.map((profile) => {
         return (
           <div key={profile._id}>
-            <div className="flex flex-col items-center">
-              <div className="relative">
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center">
                 <img
-                  id="avatar"
-                  src={url + "/images/" + profile.image}
+                  src={selectedImage || url + "/images/" + profile.image}
                   alt="Avatar"
                   className="w-32 h-32 rounded-full border-4 border-white shadow-md"
                 />
 
                 <label
-                  htmlFor="file-input"
-                  className="absolute bottom-0 right-0 p-2 bg-white rounded-full cursor-pointer"
+                  htmlFor="image"
+                  className="absolute top-[16rem] right-[43.5rem] p-2 bg-white rounded-full cursor-pointer"
                 >
                   <ModeEditOutlineIcon fontSize="medium" color="info" />
                 </label>
 
                 <input
-                  id="file-input"
-                  type="file"
-                  accept="image/*"
+                  id="image"
                   className="hidden"
+                  name="image"
+                  type="file"
                   onChange={handleImageUpload}
                 />
               </div>
 
-              <h2 className="mt-4 text-2xl font-bold">{userProfile.name}</h2>
+              <h2 className="mt-4 text-2xl font-bold">{profile.name}</h2>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
@@ -443,6 +443,11 @@ const Profile = () => {
                 </div>
               </div>
               <div className="flex flex-col">
+                {addressData.length === 0 && (
+                  <div className="text-base text-red-500 font-medium">
+                    Vui lòng thêm địa chỉ giao hàng
+                  </div>
+                )}
                 {addressData.length > 0 &&
                   addressData.map((address, index) => (
                     <div className="mb-2 w-full flex items-center justify-between">
