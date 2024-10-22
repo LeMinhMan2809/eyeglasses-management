@@ -1,6 +1,7 @@
 import React from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { BiCategoryAlt } from "react-icons/bi";
+import { SiBrandfolder } from "react-icons/si";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -9,20 +10,45 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Sidebar = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  // const [activeTab, setActiveTab] = useState(0);
   const [openSubMenu, setOpenSubMenu] = useState(false);
   const isOpenSubMenu = (index) => {
-    setOpenSubMenu(!openSubMenu);
     setActiveTab(index);
+    setOpenSubMenu(!openSubMenu);
+  };
+
+  const [openSubMenus, setOpenSubMenus] = useState({
+    product: false,
+    category: false,
+    user: false,
+    order: false,
+    brand: false,
+  });
+
+  // State to track the currently active tab
+  const [activeTab, setActiveTab] = useState("");
+
+  // Function to toggle a submenu's visibility and set the active tab
+  const toggleSubMenu = (menu) => {
+    setOpenSubMenus((prevState) => ({
+      ...prevState,
+      [menu]: !prevState[menu], // Toggle the specific submenu
+    }));
+    setActiveTab(menu); // Set the active tab
   };
 
   return (
-    <div className="ml-[1.5rem] fixed top-[6rem] h-full">
+    <div className="ml-[1.5rem] mt-[1rem] fixed top-[6rem] h-full">
       <div>
         <ul>
           <li className="mb-3">
             <Link to="/dashboard">
-              <button className="flex items-center justify-center w-[100%]">
+              <button
+                className={`flex items-center justify-center w-[100%] ${
+                  activeTab === "dashboard" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("dashboard")}
+              >
                 <DashboardIcon />
                 <p className="ml-2 font-medium text-lg">Dashboard</p>
                 <span className="ml-[7rem]">
@@ -35,9 +61,9 @@ const Sidebar = () => {
           <li className="mb-3">
             <button
               className={`flex items-center justify-center w-[100%] ${
-                activeTab === 1 ? "active" : ""
+                activeTab === "product" ? "active" : ""
               }`}
-              onClick={() => isOpenSubMenu(1)}
+              onClick={() => toggleSubMenu("product")}
             >
               <div>
                 <FaBoxOpen />
@@ -49,7 +75,7 @@ const Sidebar = () => {
             </button>
             <ul
               className={`ml-6 transition-all ease-in-out overflow-hidden ${
-                openSubMenu === true && activeTab === 1 ? "openSub" : "closeSub"
+                openSubMenus.product ? "openSub" : "closeSub"
               }`}
             >
               <li className="py-2">
@@ -64,9 +90,9 @@ const Sidebar = () => {
           <li className="mb-3">
             <button
               className={`flex items-center justify-center w-[100%] ${
-                activeTab === 2 ? "active" : ""
+                activeTab === "category" ? "active" : ""
               }`}
-              onClick={() => isOpenSubMenu(2)}
+              onClick={() => toggleSubMenu("category")}
             >
               <div>
                 <BiCategoryAlt />
@@ -78,7 +104,7 @@ const Sidebar = () => {
             </button>
             <ul
               className={`ml-6 transition-all ease-in-out overflow-hidden ${
-                openSubMenu === true && activeTab === 2 ? "openSub" : "closeSub"
+                openSubMenus.category ? "openSub" : "closeSub"
               }`}
             >
               <li className="py-2">
@@ -101,16 +127,31 @@ const Sidebar = () => {
               </span>
             </button>
           </li>
+
           <li className="mb-3">
             <button className="flex items-center justify-center w-[100%]">
               <div>
-                <AccountCircleIcon />
+                <SiBrandfolder />
               </div>
-              <p className="ml-2 font-medium text-lg">Users</p>
+              <p className="ml-2 font-medium text-lg">Brand</p>
               <span className="ml-auto">
                 <ArrowForwardIosIcon />
               </span>
             </button>
+          </li>
+
+          <li className="mb-3">
+            <Link to="/users">
+              <button className="flex items-center justify-center w-[100%]">
+                <div>
+                  <AccountCircleIcon />
+                </div>
+                <p className="ml-2 font-medium text-lg">User</p>
+                <span className="ml-auto">
+                  <ArrowForwardIosIcon />
+                </span>
+              </button>
+            </Link>
           </li>
         </ul>
       </div>
