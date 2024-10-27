@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const brypt = require("bcrypt");
 const validator = require("validator");
 // { expiresIn: "3d" }
+const nodemailer = require("nodemailer");
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "3d" });
 };
@@ -77,14 +78,14 @@ const addUser = async (req, res) => {
 
     const salt = await brypt.genSalt(10);
     const hashPassword = await brypt.hash(password, salt);
-    const image_file_name = `${req.file.filename}`;
+    // const image_file_name = `${req.file.filename}`;
 
     const user = new userModel({
       name: name,
       email: email,
       password: hashPassword,
       phone: phone,
-      image: image_file_name,
+      image: "",
     });
     await user.save();
     const token = createToken(user._id);
@@ -97,12 +98,20 @@ const addUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    // console.log("File received:", req.file);
+    const existingUser = await userModel.findById(req.params.id);
+    let updatedImage = existingUser.image; // Keep the old image by default
+    if (req.file) {
+      updatedImage = req.file.filename; // Update with new image if provided
+    }
+
     const user = await userModel.findByIdAndUpdate(
       req.params.id,
       {
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
+        image: updatedImage,
       },
       { new: true }
     );
@@ -113,6 +122,61 @@ const updateUser = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+  try {
+    const salt = await brypt.genSalt(10);
+    const hashPassword = await brypt.hash(password, salt);
+    const user = await userModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        password: hashPassword,
+      },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ success: true, message: "User updated" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await userModel.findOne({ email: email });
+    if (!user) return res.json({ success: false, message: "User not found" });
+    const token = createToken(user._id);
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "manb2003791@student.ctu.edu.vn",
+        pass: "Vc#J2sx3",
+      },
+    });
+
+    var mailOptions = {
+      from: "manb2003791@student.ctu.edu.vn",
+      to: email,
+      subject: "Reset your password",
+      text: `Nhấn vào link http://localhost:5172/reset-password/${user._id}/${token} để thay đổi mật khẩu mới.`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        return res.json({ success: true, message: "Email sent" });
+      }
+    });
+    res.json({ success: true, token });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false });
+  }
+};
+
 module.exports = {
   getUsers,
   getUserID,
@@ -120,4 +184,6 @@ module.exports = {
   userLogin,
   getOneUser,
   updateUser,
+  forgotPassword,
+  resetPassword,
 };
