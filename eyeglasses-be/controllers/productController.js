@@ -8,7 +8,23 @@ require("dotenv").config();
 
 const getProducts = async (req, res) => {
   try {
-    const products = await productModel.find().populate("category");
+    const products = await productModel
+      .find()
+      .populate("category")
+      .populate("brand");
+    res.json(products);
+  } catch (error) {
+    console.log(error);
+    res.json({ sucess: false });
+  }
+};
+
+const getProductsByName = async (req, res) => {
+  // res.json(req.query.keyword);
+  try {
+    const products = await productModel
+      .find({ name: { $regex: req.query.keyword, $options: "i" } })
+      .populate("category");
     res.json(products);
   } catch (error) {
     console.log(error);
@@ -68,6 +84,7 @@ const addProducts = async (req, res) => {
     images: [image_file_name],
     description: req.body.description,
     price: req.body.price,
+    brand: req.body.brand,
     quantityStock: req.body.quantityStock,
     category: req.body.category,
   });
@@ -141,7 +158,8 @@ const getProductBasedOnCategory = async (req, res) => {
     // console.log(categoryId);
     const products = await productModel
       .find({ category: categoryId })
-      .populate("category");
+      .populate("category")
+      .populate("brand");
 
     if (!products || products.length === 0) {
       return res
@@ -159,6 +177,7 @@ const getProductBasedOnCategory = async (req, res) => {
 module.exports = {
   getProducts,
   getProductID,
+  getProductsByName,
   addProducts,
   deleteProducts,
   updateProducts,
