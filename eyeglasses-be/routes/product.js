@@ -7,6 +7,7 @@ const path = require("path");
 const Product = require("../models/product");
 const {
   getProducts,
+  getProductsByName,
   addProducts,
   getProductID,
   updateProducts,
@@ -26,6 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 productRouter.get("/", getProducts);
+productRouter.get("/search", getProductsByName);
 productRouter.get("/:id", getProductID);
 productRouter.get("/category/:categoryId", getProductBasedOnCategory);
 // productRouter.get("/category", getProductBasedOnCategory);
