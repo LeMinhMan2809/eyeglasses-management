@@ -2,7 +2,74 @@ const orderModel = require("../models/order");
 
 const getOrders = async (req, res) => {
   try {
-    const orders = await orderModel.find();
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const pageSize = parseInt(req.query.pageSize) || 10; // Default to 10 items per page
+
+    // Calculate skip (offset)
+    const skip = (page - 1) * pageSize;
+
+    const orders = await orderModel.find().skip(skip).limit(pageSize);
+
+    const totalOrders = await orderModel.countDocuments();
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalOrders / pageSize);
+
+    // Send response
+    res.json({
+      success: true,
+      orders,
+      totalOrders,
+      totalPages,
+      currentPage: page,
+    });
+    // res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false });
+  }
+};
+
+const getOrderByUserID = async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const pageSize = parseInt(req.query.pageSize) || 10; // Default to 10 items per page
+
+    // Calculate skip (offset)
+    const skip = (page - 1) * pageSize;
+
+    const orders = await orderModel
+      .find({ user: userID })
+      .skip(skip)
+      .limit(pageSize);
+
+    const totalOrders = await orderModel.countDocuments({ user: userID });
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalOrders / pageSize);
+
+    // Send response
+    res.json({
+      success: true,
+      orders,
+      totalOrders,
+      totalPages,
+      currentPage: page,
+    });
+    // res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false });
+  }
+};
+
+const getOrderByOrderId = async (req, res) => {
+  try {
+    const { orderID } = req.params;
+
+    const orders = await orderModel.find({ _id: orderID });
+
     res.json(orders);
   } catch (error) {
     console.log(error);
@@ -109,4 +176,21 @@ function sortObject(obj) {
   return sorted;
 }
 
-module.exports = { getOrders, addOrder };
+const deleteOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await orderModel.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false });
+  }
+};
+
+module.exports = {
+  getOrders,
+  getOrderByUserID,
+  getOrderByOrderId,
+  addOrder,
+  deleteOrder,
+};
