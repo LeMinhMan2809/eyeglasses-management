@@ -8,6 +8,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Person4Icon from "@mui/icons-material/Person4";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import logo_w from "../assets/logo_w.png";
 import logo_b from "../assets/logo_b.png";
 import search_icon_light from "../assets/search-w.png";
@@ -18,6 +19,7 @@ import { listCategories } from "../utils/handleAPI";
 
 const Navbar = () => {
   const [categoryData, setCategoryData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const { cartData } = useContext(StoreContext);
   const token = localStorage.getItem("token");
 
@@ -51,6 +53,7 @@ const Navbar = () => {
     localStorage.removeItem("cart");
     localStorage.removeItem("token");
     setToken("");
+    window.location.reload();
     navigate("/");
   };
 
@@ -82,6 +85,8 @@ const Navbar = () => {
         <div className="flex items-center justify-center rounded-[50px] px-[10px] py-[10px]">
           <div className="z-[1000] mr-[2rem]">
             <input
+              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchTerm}
               onFocus={handleFocus}
               onBlur={handleBlur}
               type="text"
@@ -89,12 +94,13 @@ const Navbar = () => {
               className="p-3 text-[15px] font-medium w-[270px] rounded-[50px] opacity-70"
             />
           </div>
-
-          <img
-            src={search_icon_black}
-            alt="search"
-            className="w-4 h-4 absolute right-[200px] z-[1000] cursor-pointer"
-          />
+          <Link to={`/search?keyword=${searchTerm}`}>
+            <img
+              src={search_icon_black}
+              alt="search"
+              className="w-4 h-4 absolute right-[200px] top-[2.9rem] z-[1000] cursor-pointer"
+            />
+          </Link>
 
           {!token ? (
             <div>
@@ -136,6 +142,10 @@ const Navbar = () => {
                     <button onClick={Logout}>
                       <LogoutIcon fontSize="small" className="pr-2" />
                       <Link to="/">Đăng xuất</Link>
+                    </button>
+                    <button>
+                      <ShoppingCartIcon fontSize="small" className="pr-2" />
+                      <Link to="/order">Đơn hàng</Link>
                     </button>
                   </div>
                 </div>
