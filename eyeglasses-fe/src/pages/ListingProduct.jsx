@@ -8,7 +8,8 @@ import {
   getProductsByKeyword,
 } from "../utils/handleAPI";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import FilterSideBar from "../components/FilterSideBar";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const ListingProduct = () => {
   const { categoryID } = useParams();
@@ -18,13 +19,33 @@ const ListingProduct = () => {
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
 
-  useEffect(() => {
-    if (!keyword.get("keyword")) {
-      listCategories("/api/category").then((res) => {
-        setCategoryData(res);
-      });
+  const [filteredProducts, setFilteredProducts] = useState(productData);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+
+  const handleBrandChange = (brand, isChecked) => {
+    if (isChecked) {
+      setSelectedBrands((prev) => [...prev, brand]); // Add the selected brand
+    } else {
+      setSelectedBrands((prev) => prev.filter((b) => b !== brand)); // Remove the unselected brand
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    // Filter the products based on selected brands
+    if (selectedBrands.length > 0) {
+      console.log(selectedBrands);
+      console.log(productData);
+      // const filtered = productData.filter((product) => product.brand);
+      const filtered = productData.filter((product) =>
+        selectedBrands.includes(product.brand?.name)
+      );
+      console.log(filtered);
+      setFilteredProducts(filtered);
+      setLoading(false);
+    } else {
+      setFilteredProducts(productData); // If no brands are selected, show all products
+    }
+  }, [selectedBrands, productData]);
 
   useEffect(() => {
     if (!keyword.get("keyword")) {
@@ -48,35 +69,42 @@ const ListingProduct = () => {
     }
   }, [keyword]);
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state
-  }
-
   return (
-    <section className="bg-[#fbfbfb]">
-      <div className="flex gap-4 ml-[70px] mr-[100px] mt-10">
-        <div className="w-[8rem]">
-          <FilterSideBar />
-        </div>
+    <div>
+      {loading ? (
+        <Box
+          className="flex justify-center items-center mt-10"
+          sx={{ display: "flex" }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <section className="bg-[#fbfbfb]">
+          <div className="flex gap-4 ml-[70px] mr-[100px] mt-10">
+            <div className="w-[10rem]">
+              <FilterSideBar handleBrandChange={handleBrandChange} />
+            </div>
 
-        <div className="w-full] ml-3">
-          <h1 className="text-2xl font-bold mb-5">Danh sách sản phẩm</h1>
-          <div className="grid grid-cols-4 gap-6">
-            {productData.map((product, index) => (
-              <Link to={`/product/${product._id}`} key={index}>
-                <ProductCard
-                  key={index}
-                  name={product.name}
-                  images={product.images}
-                  price={product.price}
-                  description={product.description}
-                />
-              </Link>
-            ))}
+            <div className="w-full] ml-3">
+              <h1 className="text-2xl font-bold mb-5">Danh sách sản phẩm</h1>
+              <div className="grid grid-cols-4 gap-6">
+                {filteredProducts.map((product, index) => (
+                  <Link to={`/product/${product._id}`} key={index}>
+                    <ProductCard
+                      key={index}
+                      name={product.name}
+                      images={product.images}
+                      price={product.price}
+                      description={product.description}
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      )}
+    </div>
   );
 };
 
