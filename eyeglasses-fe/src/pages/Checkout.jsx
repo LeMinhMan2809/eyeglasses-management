@@ -111,7 +111,8 @@ const Checkout = () => {
     };
     addOrderAPI("/api/orders/add", order).then((res) => {
       if (res.success) {
-        // console.log(res.order);
+        console.log(res);
+
         const orderDetail = {
           order: res.order._id,
           products: cartDataList.map((item) => ({
@@ -125,16 +126,17 @@ const Checkout = () => {
           })),
         };
 
+        if (paymentMethod === "Thanh toán online") {
+          window.location.href = res.paymentUrl;
+        } else {
+          window.location.href = "http://localhost:5172/thanks";
+        }
+
         addOrderDetailAPI("/api/orderDetail/add", orderDetail).then((res) => {
           if (res.success) {
             localStorage.removeItem("cart");
             console.log("Thành công");
             // toast.success("Thanh toán thành công");
-            if (paymentMethod === "Thanh toán online") {
-              window.location.href = res.paymentUrl;
-            } else {
-              window.location.href = "http://localhost:5172/thanks";
-            }
           }
         });
       } else {
