@@ -25,9 +25,17 @@ const PayMent = () => {
             <img className="w-10" src={thankyou} />
           </div>
           <div>
-            <p className="text-center text-2xl font-semibold text-green-500">
+            <p className="text-2xl font-bold text-center text-green-600">
               Thanh toán thành công
             </p>
+          </div>
+          <h1 className="text-xl font-bold text-center mt-2 text-green-500">
+            Cảm ơn bạn đã đặt hàng
+          </h1>
+          <div className="mt-6 text-center">
+            <button className="px-4 py-2 text-white bg-[#AB886D] rounded hover:bg-[#aa6d3e]">
+              <a href="/">Về trang chủ</a>
+            </button>
           </div>
         </div>
       ) : (
