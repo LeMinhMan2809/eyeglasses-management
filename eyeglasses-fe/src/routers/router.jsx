@@ -14,6 +14,12 @@ import PrivateRoute from "../components/PrivateRoute";
 import Order from "../pages/Order";
 import Payment from "../pages/Payment";
 import Thanks from "../pages/Thanks";
+import OrderDetail from "../pages/OrderDetail";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import WishList from "../pages/WishList";
+import Blog from "../pages/Blog";
+import Contact from "../pages/Contact";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +46,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Profile />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "wishlist",
+        element: (
+          <PrivateRoute>
+            <WishList />
           </PrivateRoute>
         ),
       },
@@ -77,14 +91,39 @@ const router = createBrowserRouter([
         element: <Order />,
       },
       {
-        path: "thanks",
+        path: "order/:orderID",
         element: (
           <PrivateRoute>
-            <Thanks />
+            <OrderDetail />
           </PrivateRoute>
         ),
       },
+      {
+        path: "/blog",
+        element: <Blog />,
+      },
+
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
     ],
+  },
+  {
+    path: "/forgotpw",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/reset-password/:id/:token",
+    element: <ResetPassword />,
+  },
+  {
+    path: "/thanks",
+    element: (
+      <PrivateRoute>
+        <Thanks />
+      </PrivateRoute>
+    ),
   },
 ]);
 
