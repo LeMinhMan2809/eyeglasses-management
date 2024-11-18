@@ -35,10 +35,10 @@ const addOrderDetail = async (req, res) => {
   }
 };
 
-const deleteOrderDetail = async (req, res) => {
+const deleteOrderDetailByOrderID = async (req, res) => {
   const { id } = req.params;
   try {
-    await orderModel.findByIdAndDelete(id);
+    await orderDetailModel.findByIdAndDelete(id);
     res.json({ success: true });
   } catch (error) {
     console.log(error);
@@ -50,5 +50,5 @@ module.exports = {
   getOrderDetail,
   getOrderDetailByOrderID,
   addOrderDetail,
-  deleteOrderDetail,
+  deleteOrderDetailByOrderID,
 };
