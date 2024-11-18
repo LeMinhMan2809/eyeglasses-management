@@ -10,12 +10,11 @@ const getBrands = async (req, res) => {
   }
 };
 
-const getCategoriesID = async (req, res) => {
+const getBrandByID = async (req, res) => {
   try {
-    const category = await categoryModel.findById(req.params.id);
-    if (!category)
-      return res.status(404).json({ message: "Category not found" });
-    res.json(category);
+    const brand = await brandModel.findById(req.params.id);
+    if (!brand) return res.status(404).json({ message: "Brand not found" });
+    res.json(brand);
   } catch (error) {
     console.log(error);
     res.json({ success: false });
@@ -70,6 +69,7 @@ const deleteBrand = async (req, res) => {
 
 module.exports = {
   getBrands,
+  getBrandByID,
   addBrand,
   updateBrand,
   deleteBrand,
