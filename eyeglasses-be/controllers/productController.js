@@ -19,6 +19,39 @@ const getProducts = async (req, res) => {
   }
 };
 
+const getProductsPagination = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const pageSize = parseInt(req.query.pageSize) || 10; // Default to 10 items per page
+
+    // Calculate skip (offset)
+    const skip = (page - 1) * pageSize;
+
+    const products = await productModel
+      .find()
+      .skip(skip)
+      .limit(pageSize)
+      .populate("brand");
+
+    const totalProducts = await productModel.countDocuments();
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalProducts / pageSize);
+
+    // Send response
+    res.json({
+      success: true,
+      products,
+      totalProducts,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ sucess: false });
+  }
+};
+
 const getProductsByName = async (req, res) => {
   // res.json(req.query.keyword);
   try {
@@ -34,7 +67,9 @@ const getProductsByName = async (req, res) => {
 
 const getProductID = async (req, res) => {
   try {
-    const products = await productModel.findById(req.params.id).populate();
+    const products = await productModel
+      .findById(req.params.id)
+      .populate("brand category");
     if (!products)
       return res.status(404).json({ message: "Product not found" });
     res.json(products);
@@ -177,6 +212,7 @@ const getProductBasedOnCategory = async (req, res) => {
 module.exports = {
   getProducts,
   getProductID,
+  getProductsPagination,
   getProductsByName,
   addProducts,
   deleteProducts,
